@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/config.js"; // Імпорт налаштування Firebase
+import { login } from "../firebase/firebaseService.js";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -11,8 +12,9 @@ export default function LoginForm() {
     e.preventDefault();
     setError(null);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard"); // або твоя основна сторінка після входу
+      await login(email, password);
+      setEmail(""), setPassword("");
+      alert("Успішно увійшов");
     } catch (err) {
       setError("Невірний email або пароль");
     }

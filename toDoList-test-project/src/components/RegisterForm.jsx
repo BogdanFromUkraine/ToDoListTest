@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { register } from "../firebase/firebaseService";
 
 export default function RegisterForm({ onRegister }) {
   const [formData, setFormData] = useState({
@@ -14,12 +15,14 @@ export default function RegisterForm({ onRegister }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Виклик функції реєстрації, якщо передана
-    if (onRegister) {
-      onRegister(formData);
-    }
+    await register({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
     // Очистити форму
     setFormData({ name: "", email: "", password: "" });
   };

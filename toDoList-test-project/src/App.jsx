@@ -1,8 +1,17 @@
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
+import Header from "./components/Header";
+import { Outlet } from "react-router-dom";
+import Footer from "./components/Footer";
 
 function App() {
-  return <div></div>;
+  return (
+    <div>
+      <Header />
+      <Outlet />
+      <Footer />
+    </div>
+  );
 }
 
 export default App;
