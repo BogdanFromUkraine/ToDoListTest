@@ -3,7 +3,6 @@ import {
   collection,
   query,
   where,
-  orderBy,
   onSnapshot,
   addDoc,
   getDocs,
@@ -65,4 +64,34 @@ export async function updateToDoList(toDoListId, editTitle) {
   await updateDoc(doc(db, "todoLists", toDoListId), {
     title: editTitle,
   });
+}
+
+export async function getTasksForList(listId) {
+  const tasksRef = collection(db, "todoLists", listId, "tasks");
+  const snapshot = await getDocs(tasksRef);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+export async function deleteTask(listId, taskId) {
+  const taskRef = doc(db, "todoLists", listId, "tasks", taskId);
+  await deleteDoc(taskRef);
+}
+
+export async function updateTask(
+  listId,
+  taskId,
+  { editTitle, editDescription }
+) {
+  const taskRef = doc(db, "todoLists", listId, "tasks", taskId);
+  await updateDoc(taskRef, { title: editTitle, description: editDescription });
+}
+
+export async function changeStatus(listId, task) {
+  const taskRef = doc(db, "todoLists", listId, "tasks", task.id);
+  await updateDoc(taskRef, { completed: !task.completed });
+}
+
+export async function createTask(listId, taskData) {
+  const tasksRef = collection(db, "todoLists", listId, "tasks");
+  await addDoc(tasksRef, taskData);
 }
