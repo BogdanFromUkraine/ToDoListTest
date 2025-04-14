@@ -6,6 +6,7 @@ import LoginForm from "./components/LoginForm.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";
 import Main from "./components/Main.jsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import CollaborativeTodoLists from "./components/CollaborativeTodoList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
       { path: "/", element: <Main /> },
       { path: "logIn", element: <LoginForm /> },
       { path: "register", element: <RegisterForm /> },
+      { path: "collaborative", element: <CollaborativeTodoLists /> },
     ],
   },
 ]);

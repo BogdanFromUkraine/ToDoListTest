@@ -1,6 +1,19 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 export default function Header() {
+  const [user, setUser] = useState(null);
+  const auth = getAuth();
+
+  useEffect(() => {
+    // Слухаємо зміну стану авторизації
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe(); // Очищаємо підписку
+  }, [auth]);
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -14,13 +27,11 @@ export default function Header() {
       <Link to="/" className="text-xl font-bold text-blue-600">
         To-Do App
       </Link>
+      <Link to="/collaborative">Корператив</Link>
 
       <nav className="flex items-center space-x-4">
-        {false ? (
+        {user ? (
           <>
-            <Link to="/lists" className="text-gray-700 hover:text-blue-600">
-              Списки завдань
-            </Link>
             <button
               onClick={handleLogout}
               className="bg-red-500 text-white px-4 py-1 rounded-lg hover:bg-red-600 transition"

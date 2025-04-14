@@ -36,8 +36,8 @@ export async function login(email, password) {
     );
     const user = userCredential.user;
     const token = await user.getIdToken();
-    localStorage.setItem("token", token); // зберігаємо токен
-    localStorage.setItem("userId", user.uid); // можна також зберегти
+    localStorage.setItem("token", token);
+    localStorage.setItem("userId", user.uid);
   } catch (error) {
     console.error("Error login user: ", error);
     throw error;
