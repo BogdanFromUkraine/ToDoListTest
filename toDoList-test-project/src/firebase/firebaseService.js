@@ -29,15 +29,24 @@ export async function register({ name, email, password }) {
 
 export async function login(email, password) {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+    const token = await user.getIdToken();
+    localStorage.setItem("token", token); // зберігаємо токен
+    localStorage.setItem("userId", user.uid); // можна також зберегти
   } catch (error) {
     console.error("Error login user: ", error);
     throw error;
   }
 }
 
-export async function getToDoLists(uid, callback) {
-  const q = query(collection(db, "todoLists"), where("owner", "==", uid));
+export async function getToDoLists(callback) {
+  const userId = localStorage.getItem("userId");
+  const q = query(collection(db, "todoLists"), where("owner", "==", userId));
 
   onSnapshot(q, (snapshot) => {
     const items = snapshot.docs.map((doc) => ({
@@ -48,10 +57,11 @@ export async function getToDoLists(uid, callback) {
   });
 }
 
-export async function createToDoList(uid, newTitle) {
+export async function createToDoList(newTitle) {
+  const userId = localStorage.getItem("userId");
   await addDoc(collection(db, "todoLists"), {
     title: newTitle,
-    owner: uid,
+    owner: userId,
     createdAt: new Date(),
   });
 }

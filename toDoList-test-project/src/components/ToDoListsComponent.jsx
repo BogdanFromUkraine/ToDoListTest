@@ -27,7 +27,7 @@ export default function TodoListsComponent() {
   useEffect(() => {
     if (!user) return;
     const fetchData = async () => {
-      await getToDoLists(user.uid, setLists);
+      await getToDoLists(setLists);
     };
     fetchData();
   }, [user]);
@@ -40,7 +40,7 @@ export default function TodoListsComponent() {
 
   const handleAddList = async () => {
     if (!newTitle.trim()) return;
-    await createToDoList(user.uid, newTitle);
+    await createToDoList(newTitle);
     setNewTitle("");
     await getToDoLists(user.uid, setLists);
   };
